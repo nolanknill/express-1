@@ -53,15 +53,10 @@ const contestants = [
 
 app
     .route("/contestants")
-    .get((req, res) => {
+    .get((_req, res) => {
         res.status(200).json(contestants);
     })
     .post((req, res) => {
-        // Add a contestant!
-
-        // Please validate above this point (check the age and rating are numbers)
-        // and that all values are here (name, hometown, country, originalSeason)
-
         const {
             name,
             hometown,
@@ -91,20 +86,35 @@ app
     })
 
 //GET /contestants/:contestantId
-app.get("/contestants/:contestantId", (req, res) => {
-    const contestantId = Number(req.params.contestantId);
-    
-    const foundContestant = contestants.find((contestant) => {
-        return contestant.id === contestantId;
+app.route("/contestants/:contestantId")
+    .get((req, res) => {
+        const contestantId = Number(req.params.contestantId);
+        
+        const foundContestant = contestants.find((contestant) => {
+            return contestant.id === contestantId;
+        });
+
+        if (!foundContestant) {
+            return res.status(404).json({ error: "Contestant not found" });
+        }
+
+        // respond with 404 if didn't find contestant
+        return res.status(200).json(foundContestant);
+    })
+    .delete((req, res) => {
+        const contestantId = Number(req.params.contestantId);
+        
+        const foundContestantIndex = contestants.findIndex((contestant) => {
+            return contestant.id === contestantId;
+        });
+
+        if (foundContestantIndex === -1) {
+            return res.status(404).json({ error: "Contestant not found" });
+        }
+
+        contestants.splice(foundContestantIndex, 1);
+        return res.status(204).send();
     });
-
-    if (!foundContestant) {
-        return res.status(404).json({ error: "Contestant not found" });
-    }
-
-    // respond with 404 if didn't find contestant
-    return res.status(200).json(foundContestant);
-});
 
 app.listen(8080, function() {
     console.log("Server is now listening at http://localhost:8080");
