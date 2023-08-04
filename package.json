@@ -1,0 +1,16 @@
+{
+  "name": "lec-express",
+  "version": "1.0.0",
+  "description": "Express lecture demo code",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "super-cool-demo",
+    "express",
+    "node"
+  ],
+  "author": "nolan",
+  "license": "ISC"
+}
